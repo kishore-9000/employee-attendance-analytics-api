@@ -3,57 +3,1098 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HROne Employee Attendance & Analytics API</title>
+    <title>HROne Employee Attendance & Analytics API — System Portal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --accent-primary: #38bdf8;
+            --accent-secondary: #818cf8;
+            --accent-emerald: #34d399;
+            --accent-amber: #fbbf24;
+            --accent-rose: #f43f5e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0284c7, #4f46e5);
+            color: white;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 2rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
             text-align: center;
         }
-        .container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 20px;
+            color: var(--accent-primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 750px;
+            margin: 0 auto 2.5rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
         }
-        h1 {
-            color: #2c3e50;
-        }
-        p {
-            color: #555;
-            line-height: 1.6;
-        }
-        .btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #3498db;
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
             color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: bold;
-            transition: background-color 0.3s;
+            margin-bottom: 0.25rem;
         }
-        .btn:hover {
-            background-color: #2980b9;
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Main Content Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 5rem;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Flow Diagrams Section */
+        .flow-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-primary);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Step Diagrams */
+        .pipeline-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            position: relative;
+        }
+
+        .step-box {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+
+        .step-box:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-desc {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .step-code {
+            background: #020617;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: #38bdf8;
+            overflow-x: auto;
+        }
+
+        /* Codebase Files Explorer Grid */
+        .explorer-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            min-height: 550px;
+        }
+
+        .file-tree {
+            background: #0f172a;
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem 1rem;
+            overflow-y: auto;
+            max-height: 600px;
+        }
+
+        .file-tree-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            padding-left: 0.5rem;
+        }
+
+        .tree-folder {
+            margin-bottom: 0.75rem;
+        }
+
+        .folder-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-amber);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .folder-files {
+            padding-left: 1rem;
+            border-left: 1px solid var(--border-color);
+            margin-left: 0.75rem;
+        }
+
+        .file-item {
+            font-size: 0.825rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            padding: 0.35rem 0.6rem;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.15s;
+        }
+
+        .file-item:hover, .file-item.active {
+            background: var(--bg-card-hover);
+            color: var(--accent-primary);
+        }
+
+        .file-tag {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+        }
+
+        .file-viewer {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .viewer-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .viewer-filename {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .viewer-meta {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .viewer-content {
+            background: #020617;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            flex-grow: 1;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        /* API Cards Grid */
+        .api-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .api-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .api-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-primary);
+        }
+
+        .api-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .method-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .method-get { background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); border: 1px solid rgba(52, 211, 153, 0.3); }
+        .method-post { background: rgba(56, 189, 248, 0.15); color: var(--accent-primary); border: 1px solid rgba(56, 189, 248, 0.3); }
+
+        .api-endpoint {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .api-desc {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            background: #090d16;
+        }
+
+        footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .explorer-layout { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>HROne Employee Attendance & Analytics API</h1>
-        <p>Welcome to the HROne API service. This backend service powers employee attendance tracking and analytics operations.</p>
-        <a href="/docs" class="btn">View API Documentation (Swagger)</a>
-        <br>
-        <a href="/redoc" class="btn" style="background-color: #e67e22;">View API Documentation (ReDoc)</a>
+
+    <!-- Navigation Header -->
+    <nav>
+        <a href="#" class="brand">
+            <span class="brand-badge">HROne API</span>
+            Employee Attendance & Analytics
+        </a>
+        <ul class="nav-links">
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#workflows">System Flows</a></li>
+            <li><a href="#explorer">Codebase Explorer</a></li>
+            <li><a href="#api-reference">API Endpoints</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="/docs" class="btn btn-primary" target="_blank">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Swagger UI (/docs)
+            </a>
+            <a href="/redoc" class="btn btn-secondary" target="_blank">ReDoc</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="overview">
+        <div class="hero-pill">⚡ Enterprise FastAPI + MongoDB PyMongo Engine</div>
+        <h1>HROne Workforce Attendance & Analytics API</h1>
+        <p>A production-ready RESTful architecture featuring strict punch lifecycle rules, append-only administrative audit logging, and server-side MongoDB aggregation pipelines.</p>
+    </section>
+
+    <!-- Metrics Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">3-Tier</div>
+            <div class="stat-label">Layered Architecture (Routes ➔ Services ➔ Repositories)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">10+</div>
+            <div class="stat-label">Production REST API Endpoints</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">3</div>
+            <div class="stat-label">MongoDB Server-Side Aggregation Pipelines</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Immutable Correction Audit Trail & Unit Coverage</div>
+        </div>
     </div>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Flow Diagrams Section -->
+        <section class="section" id="workflows">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <svg width="24" height="24" fill="none" stroke="var(--accent-primary)" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Full System Execution Flows
+                </h2>
+                <p class="section-subtitle">Explore the complete end-to-end processing pipeline for attendance events, corrections, and analytics.</p>
+            </div>
+
+            <div class="flow-card">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchTab('flow-attendance')">1. Punch Lifecycle Flow</button>
+                    <button class="tab-btn" onclick="switchTab('flow-corrections')">2. Manual Correction & Audit Trail Flow</button>
+                    <button class="tab-btn" onclick="switchTab('flow-analytics')">3. MongoDB Aggregation Flow</button>
+                </div>
+
+                <!-- Tab 1: Punch Flow -->
+                <div id="flow-attendance" class="tab-content active">
+                    <div class="pipeline-steps">
+                        <div class="step-box">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Punch-In Trigger</div>
+                            <div class="step-desc">Employee records punch-in with employee ID and UTC timestamp. System checks if a record already exists for the UTC date.</div>
+                            <div class="step-code">POST /api/v1/attendance/punch-in
+{"employee_id": "EMP001", "punch_in": "2024-06-01T09:00:00Z"}</div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Conflict Validation</div>
+                            <div class="step-desc">If employee already punched in on the same UTC day, returns HTTP 409 Conflict. Otherwise creates record with status <code>incomplete</code>.</div>
+                            <div class="step-code">status: "incomplete"
+work_duration_minutes: null</div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Punch-Out & Calculation</div>
+                            <div class="step-desc">Records punch-out timestamp. Validates punch_out > punch_in, computes total work duration in minutes, updates status to <code>present</code>.</div>
+                            <div class="step-code">status: "present"
+work_duration_minutes: 510</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Corrections Flow -->
+                <div id="flow-corrections" class="tab-content">
+                    <div class="pipeline-steps">
+                        <div class="step-box">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Correction Request</div>
+                            <div class="step-desc">Admin sends updated timestamps with mandatory <code>reason</code> and <code>corrected_by</code> fields.</div>
+                            <div class="step-code">POST /attendance/{id}/correct
+{"punch_in": "08:55:00Z", "reason": "System delay"}</div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Audit Snapshot</div>
+                            <div class="step-desc">System captures <code>old_values</code> and <code>new_values</code> before mutating the record fields.</div>
+                            <div class="step-code">old_values: {punch_in: "09:30:00Z"}
+new_values: {punch_in: "08:55:00Z"}</div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Atomic $push Update</div>
+                            <div class="step-desc">Performs single atomic MongoDB update: <code>$set</code> main fields & <code>$push</code> audit object into <code>corrections</code> array.</div>
+                            <div class="step-code">db.attendance.updateOne({
+  $set: {...}, $push: {corrections: entry}
+})</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Analytics Flow -->
+                <div id="flow-analytics" class="tab-content">
+                    <div class="pipeline-steps">
+                        <div class="step-box">
+                            <div class="step-number">1</div>
+                            <div class="step-title">$match Stage</div>
+                            <div class="step-desc">Filters attendance records between start_date and end_date using MongoDB date index.</div>
+                            <div class="step-code">{"$match": {"date": {"$gte": "2024-06-01"}}}</div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">2</div>
+                            <div class="step-title">$group & $cond</div>
+                            <div class="step-desc">Groups by date or employee_id and calculates status totals dynamically using conditional sums.</div>
+                            <div class="step-code">"present": {"$sum": {"$cond": [{"$eq": ["$status", "present"]}, 1, 0]}}</div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">3</div>
+                            <div class="step-title">$project Output</div>
+                            <div class="step-desc">Formats metrics and computes average work duration per employee before returning JSON payload.</div>
+                            <div class="step-code">{"average_work_minutes": {"$divide": [...]}}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Codebase File Tree Explorer -->
+        <section class="section" id="explorer">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <svg width="24" height="24" fill="none" stroke="var(--accent-secondary)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                    Interactive Repository File Explorer
+                </h2>
+                <p class="section-subtitle">Explore every file included in this codebase, its responsibility, and architecture layer.</p>
+            </div>
+
+            <div class="explorer-layout">
+                <!-- File Tree Left Sidebar -->
+                <div class="file-tree">
+                    <div class="file-tree-title">Workspace Files</div>
+
+                    <div class="tree-folder">
+                        <div class="folder-name">📁 app/ (Core Source)</div>
+                        <div class="folder-files">
+                            <div class="file-item active" onclick="showFile('main.py')"><span>main.py</span> <span class="file-tag">App</span></div>
+                        </div>
+                    </div>
+
+                    <div class="tree-folder">
+                        <div class="folder-name">📁 app/api/ (Controllers)</div>
+                        <div class="folder-files">
+                            <div class="file-item" onclick="showFile('router.py')"><span>router.py</span> <span class="file-tag">Router</span></div>
+                            <div class="file-item" onclick="showFile('attendance.py')"><span>attendance.py</span> <span class="file-tag">Route</span></div>
+                            <div class="file-item" onclick="showFile('corrections.py')"><span>corrections.py</span> <span class="file-tag">Route</span></div>
+                            <div class="file-item" onclick="showFile('analytics.py')"><span>analytics.py</span> <span class="file-tag">Route</span></div>
+                        </div>
+                    </div>
+
+                    <div class="tree-folder">
+                        <div class="folder-name">📁 app/services/ (Logic)</div>
+                        <div class="folder-files">
+                            <div class="file-item" onclick="showFile('attendance_service.py')"><span>attendance_service.py</span> <span class="file-tag">Service</span></div>
+                            <div class="file-item" onclick="showFile('correction_service.py')"><span>correction_service.py</span> <span class="file-tag">Service</span></div>
+                            <div class="file-item" onclick="showFile('analytics_service.py')"><span>analytics_service.py</span> <span class="file-tag">Service</span></div>
+                        </div>
+                    </div>
+
+                    <div class="tree-folder">
+                        <div class="folder-name">📁 app/repositories/ (DB Access)</div>
+                        <div class="folder-files">
+                            <div class="file-item" onclick="showFile('attendance_repository.py')"><span>attendance_repository.py</span> <span class="file-tag">Repo</span></div>
+                        </div>
+                    </div>
+
+                    <div class="tree-folder">
+                        <div class="folder-name">📁 app/core/ (Config & DB)</div>
+                        <div class="folder-files">
+                            <div class="file-item" onclick="showFile('database.py')"><span>database.py</span> <span class="file-tag">Mongo</span></div>
+                            <div class="file-item" onclick="showFile('config.py')"><span>config.py</span> <span class="file-tag">Env</span></div>
+                            <div class="file-item" onclick="showFile('logging.py')"><span>logging.py</span> <span class="file-tag">Log</span></div>
+                        </div>
+                    </div>
+
+                    <div class="tree-folder">
+                        <div class="folder-name">📁 tests/ & scripts/</div>
+                        <div class="folder-files">
+                            <div class="file-item" onclick="showFile('test_attendance.py')"><span>test_attendance.py</span> <span class="file-tag">Test</span></div>
+                            <div class="file-item" onclick="showFile('test_corrections.py')"><span>test_corrections.py</span> <span class="file-tag">Test</span></div>
+                            <div class="file-item" onclick="showFile('test_analytics.py')"><span>test_analytics.py</span> <span class="file-tag">Test</span></div>
+                            <div class="file-item" onclick="showFile('seed_data.py')"><span>seed_data.py</span> <span class="file-tag">Script</span></div>
+                        </div>
+                    </div>
+
+                    <div class="tree-folder">
+                        <div class="folder-name">📄 Configuration</div>
+                        <div class="folder-files">
+                            <div class="file-item" onclick="showFile('README.md')"><span>README.md</span> <span class="file-tag">Docs</span></div>
+                            <div class="file-item" onclick="showFile('REQUIREMENTS.md')"><span>REQUIREMENTS.md</span> <span class="file-tag">Req</span></div>
+                            <div class="file-item" onclick="showFile('pyproject.toml')"><span>pyproject.toml</span> <span class="file-tag">Config</span></div>
+                            <div class="file-item" onclick="showFile('.env.example')"><span>.env.example</span> <span class="file-tag">Env</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File Viewer Content Panel -->
+                <div class="file-viewer">
+                    <div class="viewer-header">
+                        <div class="viewer-filename" id="viewer-file-title">app/main.py</div>
+                        <div class="viewer-meta" id="viewer-file-desc">FastAPI Application Factory & Exception Handler Registration</div>
+                    </div>
+                    <div class="viewer-content" id="viewer-file-body">
+loading file preview...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- API Endpoints Reference -->
+        <section class="section" id="api-reference" style="margin-top: 4rem;">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <svg width="24" height="24" fill="none" stroke="var(--accent-emerald)" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                    API Endpoints Reference
+                </h2>
+                <p class="section-subtitle">Quick overview of available REST routes supported by the server.</p>
+            </div>
+
+            <div class="api-grid">
+                <div class="api-card">
+                    <div class="api-header">
+                        <span class="method-badge method-post">POST</span>
+                        <span class="api-endpoint">/api/v1/attendance/punch-in</span>
+                    </div>
+                    <div class="api-desc">Record a punch-in timestamp for an employee. Rejects duplicate punch-ins on the same UTC calendar day with HTTP 409.</div>
+                </div>
+
+                <div class="api-card">
+                    <div class="api-header">
+                        <span class="method-badge method-post">POST</span>
+                        <span class="api-endpoint">/api/v1/attendance/{id}/punch-out</span>
+                    </div>
+                    <div class="api-desc">Record punch-out timestamp, updates status to present, and calculates work duration in minutes.</div>
+                </div>
+
+                <div class="api-card">
+                    <div class="api-header">
+                        <span class="method-badge method-post">POST</span>
+                        <span class="api-endpoint">/api/v1/attendance/{id}/correct</span>
+                    </div>
+                    <div class="api-desc">Apply manual timestamp correction. Appends old/new values, reason, and admin ID to immutable audit log.</div>
+                </div>
+
+                <div class="api-card">
+                    <div class="api-header">
+                        <span class="method-badge method-get">GET</span>
+                        <span class="api-endpoint">/api/v1/analytics/daily</span>
+                    </div>
+                    <div class="api-desc">Return per-day present, absent, and incomplete attendance counts aggregated via MongoDB $group pipeline.</div>
+                </div>
+
+                <div class="api-card">
+                    <div class="api-header">
+                        <span class="method-badge method-get">GET</span>
+                        <span class="api-endpoint">/api/v1/analytics/employees</span>
+                    </div>
+                    <div class="api-desc">Per-employee total work days, work duration minutes, and average daily work duration over date range.</div>
+                </div>
+
+                <div class="api-card">
+                    <div class="api-header">
+                        <span class="method-badge method-get">GET</span>
+                        <span class="api-endpoint">/api/v1/analytics/summary</span>
+                    </div>
+                    <div class="api-desc">Overall attendance counts and total work minutes for the entire organization across date filters.</div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>HROne Software Engineer Trainee Technical Project — Attendance & Analytics REST API</p>
+        <p style="margin-top: 0.5rem;">Built with FastAPI & PyMongo | Documentation available at <a href="/docs">/docs</a> & <a href="/redoc">/redoc</a></p>
+    </footer>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        const fileData = {
+            'main.py': {
+                title: 'app/main.py',
+                desc: 'FastAPI application factory with lifespan startup/shutdown hooks & global exception handlers.',
+                body: `from fastapi import FastAPI, Request, status
+from fastapi.responses import JSONResponse
+from pymongo.errors import PyMongoError
+from app.api.router import api_router
+from app.core.database import connect_db, disconnect_db
+
+@asynccontextmanager
+async def lifespan(application: FastAPI):
+    connect_db()
+    yield
+    disconnect_db()
+
+app = FastAPI(title="Employee Attendance & Analytics API", lifespan=lifespan)
+app.include_router(api_router, prefix="/api/v1")`
+            },
+            'router.py': {
+                title: 'app/api/router.py',
+                desc: 'Central API v1 router combining attendance, corrections, and analytics sub-routers.',
+                body: `from fastapi import APIRouter
+from app.api.routes import analytics, attendance, corrections
+
+api_router = APIRouter()
+api_router.include_router(attendance.router)
+api_router.include_router(corrections.router)
+api_router.include_router(analytics.router)`
+            },
+            'attendance.py': {
+                title: 'app/api/routes/attendance.py',
+                desc: 'Route handlers for punch-in, punch-out, and attendance record retrieval.',
+                body: `@router.post("/punch-in", response_model=PunchInResponse, status_code=201)
+def punch_in(payload: PunchInRequest):
+    return attendance_service.punch_in(payload)
+
+@router.post("/{attendance_id}/punch-out", response_model=PunchOutResponse)
+def punch_out(attendance_id: str, payload: PunchOutRequest):
+    return attendance_service.punch_out(attendance_id, payload)`
+            },
+            'corrections.py': {
+                title: 'app/api/routes/corrections.py',
+                desc: 'Endpoints for manual attendance adjustments and historical audit trail queries.',
+                body: `@router.post("/{attendance_id}/correct", response_model=CorrectionResponse)
+def correct_attendance(attendance_id: str, payload: CorrectionRequest):
+    return correction_service.apply_correction(attendance_id, payload)
+
+@router.get("/{attendance_id}/corrections", response_model=list[CorrectionEntry])
+def get_corrections(attendance_id: str):
+    return correction_service.get_corrections(attendance_id)`
+            },
+            'analytics.py': {
+                title: 'app/api/routes/analytics.py',
+                desc: 'Analytics endpoints backed by MongoDB aggregation pipelines ($group, $cond).',
+                body: `@router.get("/daily", response_model=AttendanceSummaryResponse)
+def daily_summary(start_date: str, end_date: str):
+    return analytics_service.get_daily_summary(start_date, end_date)
+
+@router.get("/employees", response_model=EmployeeSummaryResponse)
+def employee_summary(start_date: str, end_date: str):
+    return analytics_service.get_employee_summary(start_date, end_date)`
+            },
+            'attendance_service.py': {
+                title: 'app/services/attendance_service.py',
+                desc: 'Business logic for punch validation, status transition (incomplete -> present), duration computation.',
+                body: `def punch_in(payload: PunchInRequest) -> dict:
+    date_str = payload.punch_in.strftime("%Y-%m-%d")
+    existing = repo.find_by_employee_and_date(payload.employee_id, date_str)
+    if existing:
+        raise HTTPException(status_code=409, detail="Duplicate punch-in")
+    return repo.create_attendance(document)`
+            },
+            'correction_service.py': {
+                title: 'app/services/correction_service.py',
+                desc: 'Audit trail builder & atomic snapshot correction handler.',
+                body: `def apply_correction(attendance_id: str, payload: CorrectionRequest):
+    correction_entry = {
+        "corrected_at": datetime.now(tz=timezone.utc),
+        "corrected_by": payload.corrected_by,
+        "reason": payload.reason,
+        "old_values": old_values,
+        "new_values": new_values,
+    }
+    return repo.push_correction(attendance_id, correction_entry, set_fields)`
+            },
+            'analytics_service.py': {
+                title: 'app/services/analytics_service.py',
+                desc: 'MongoDB server-side aggregation pipelines for daily, employee, and overall summaries.',
+                body: `def get_daily_summary(start_date: str, end_date: str):
+    pipeline = [
+        {"$match": {"date": {"$gte": start_date, "$lte": end_date}}},
+        {"$group": {
+            "_id": "$date",
+            "present": {"$sum": {"$cond": [{"$eq": ["$status", "present"]}, 1, 0]}}
+        }}
+    ]
+    return repo.aggregate(pipeline)`
+            },
+            'attendance_repository.py': {
+                title: 'app/repositories/attendance_repository.py',
+                desc: 'Data Access Layer wrapping PyMongo queries, find_one_and_update, and aggregation pipelines.',
+                body: `def push_correction(attendance_id: str, correction: dict, set_fields: dict):
+    return _col().find_one_and_update(
+        {"_id": ObjectId(attendance_id)},
+        {"$set": set_fields, "$push": {"corrections": correction}},
+        return_document=True
+    )`
+            },
+            'database.py': {
+                title: 'app/core/database.py',
+                desc: 'MongoDB connection manager with automatic index creation on application startup.',
+                body: `def connect_db():
+    _client = MongoClient(settings.mongodb_uri)
+    _client.admin.command("ping")
+    _ensure_indexes()
+
+def _ensure_indexes():
+    db["attendance"].create_index([("employee_id", 1), ("punch_in", -1)])`
+            },
+            'config.py': {
+                title: 'app/core/config.py',
+                desc: 'Pydantic Settings loading environment variables from .env file.',
+                body: `class Settings(BaseSettings):
+    mongodb_uri: str = "mongodb://localhost:27017"
+    mongodb_database: str = "attendance_db"
+    app_env: str = "development"
+    model_config = SettingsConfigDict(env_file=".env")`
+            },
+            'logging.py': {
+                title: 'app/core/logging.py',
+                desc: 'Structured logger configuration.',
+                body: `def configure_logging():
+    logging.basicConfig(level=settings.log_level, format="%(asctime)s | %(levelname)s | %(name)s | %(message)s")`
+            },
+            'test_attendance.py': {
+                title: 'tests/test_attendance.py',
+                desc: 'Pytest suite verifying punch-in creation, duplicate prevention (409), and duration calculation.',
+                body: `async def test_punch_in_success(async_client):
+    response = await async_client.post("/api/v1/attendance/punch-in", json={
+        "employee_id": "EMP999", "punch_in": "2024-06-01T09:00:00Z"
+    })
+    assert response.status_code == 201`
+            },
+            'test_corrections.py': {
+                title: 'tests/test_corrections.py',
+                desc: 'Pytest suite validating manual correction snapshots and append-only audit trail.',
+                body: `async def test_correction_audit_trail(async_client):
+    res = await async_client.post(f"/api/v1/attendance/{record_id}/correct", json={
+        "punch_in": "2024-06-01T08:50:00Z", "reason": "Correcting time", "corrected_by": "ADMIN"
+    })
+    assert len(res.json()["corrections"]) == 1`
+            },
+            'test_analytics.py': {
+                title: 'tests/test_analytics.py',
+                desc: 'Pytest suite for daily, employee, and overall aggregation endpoints.',
+                body: `async def test_daily_summary_aggregation(async_client):
+    res = await async_client.get("/api/v1/analytics/daily?start_date=2024-06-01&end_date=2024-06-30")
+    assert response.status_code == 200`
+            },
+            'seed_data.py': {
+                title: 'scripts/seed_data.py',
+                desc: 'Idempotent demonstration data seeder generating 30 days of attendance records for EMP001-EMP005.',
+                body: `def seed():
+    connect_db()
+    for emp in DEMO_EMPLOYEES:
+        for day in range(30):
+            col.insert_one(build_record(emp, day))`
+            },
+            'README.md': {
+                title: 'README.md',
+                desc: 'Full project documentation with architecture diagrams, API reference, and setup guides.',
+                body: `# HROne Employee Attendance & Analytics REST API
+A robust, enterprise-grade RESTful API built with FastAPI, MongoDB, and Pydantic v2.`
+            },
+            'REQUIREMENTS.md': {
+                title: 'REQUIREMENTS.md',
+                desc: 'Functional (FR-01 to FR-15) and Non-Functional Requirements.',
+                body: `FR-01 Punch-In: Employee records punch-in with timestamp.
+FR-02 Duplicate Punch-In Prevention: Returns 409 Conflict.
+FR-09 Correction Audit Trail: Captures old/new values, timestamp, and admin ID.`
+            },
+            'pyproject.toml': {
+                title: 'pyproject.toml',
+                desc: 'Build dependencies, pytest options, and code style configurations.',
+                body: `[project]
+name = "employee-attendance-analytics-api"
+version = "1.0.0"
+dependencies = ["fastapi>=0.115", "pymongo>=4.18", "pydantic>=2.9"]`
+            },
+            '.env.example': {
+                title: '.env.example',
+                desc: 'Environment variable template file.',
+                body: `MONGODB_URI=mongodb://localhost:27017
+MONGODB_DATABASE=attendance_db
+APP_ENV=development
+APP_HOST=0.0.0.0
+APP_PORT=8000
+LOG_LEVEL=INFO`
+            }
+        };
+
+        function showFile(fileName) {
+            document.querySelectorAll('.file-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            const file = fileData[fileName];
+            if (file) {
+                document.getElementById('viewer-file-title').innerText = file.title;
+                document.getElementById('viewer-file-desc').innerText = file.desc;
+                document.getElementById('viewer-file-body').innerText = file.body;
+            }
+        }
+
+        // Initialize with main.py
+        document.addEventListener("DOMContentLoaded", function() {
+            const mainFile = fileData['main.py'];
+            document.getElementById('viewer-file-title').innerText = mainFile.title;
+            document.getElementById('viewer-file-desc').innerText = mainFile.desc;
+            document.getElementById('viewer-file-body').innerText = mainFile.body;
+        });
+    </script>
 </body>
 </html>

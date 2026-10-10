@@ -6,8 +6,11 @@ One MongoClient is created at startup and reused throughout.
 import logging
 from typing import Optional
 
+# pyrefly: ignore [missing-import]
 from pymongo import MongoClient, ASCENDING, DESCENDING
+# pyrefly: ignore [missing-import]
 from pymongo.database import Database
+# pyrefly: ignore [missing-import]
 from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
 
 from app.core.config import settings
